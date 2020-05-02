@@ -2,13 +2,16 @@ const express = require("express");
 const redis = require("redis");
 
 const app = express();
-const client = redis.createClient();
-client.set("vistorsCount", 0);
+const client = redis.createClient({
+  host: "redis-server",
+  port: 6379,
+});
+client.set("visitorsCount", 0);
 
 app.get("/", (req, res) => {
-  client.get("visitorsCount", (error, visitors) => {
-    res.send("Number of visters is " + visitors);
-    client.set("vistorsCount", parseInt(visitors) + 1);
+  client.get("visitorsCount", (error, visits) => {
+    res.send("Number of visters is " + visits);
+    client.set("visitorsCount", parseInt(visits) + 1);
   });
 });
 
